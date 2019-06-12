@@ -8,23 +8,25 @@ import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.scislak.logic.StockSymbol.Symbols;
-
 public class LoadHTMLFile {
-	private static final String BASE_URL = "https://stooq.pl/q/?s=";
+	private static StringBuilder page;
+	private static List<String> spanList = new ArrayList<>();
 	
-	private StringBuilder page;
-	private List<String> spanList;
-	private Symbols symbol;
-	
-	public LoadHTMLFile(Symbols symbol) {
-		this.symbol = symbol;
-		loadPage();
-		cleanHtml(page.toString());
+	public static void refreshPage() {
+		getDataFromPage();
 	}
 	
-	public void cleanHtml(String html) {
-		spanList = new ArrayList<>();
+	public static void getDataFromPage() {
+		try {
+			spanList.clear();
+			loadPage();
+			cleanHtml(page.toString());
+		}catch(NullPointerException e) {
+			System.out.println("No connection");
+		}
+	}
+	
+	private static void cleanHtml(String html) {
 		int startTagIndex = 0;	
 		boolean opened = false;
 		
@@ -42,9 +44,9 @@ public class LoadHTMLFile {
 		}
 	}
 	
-	private void loadPage() {
+	private static void loadPage() {
 		try {
-			URL url = new URL(BASE_URL + StockSymbol.getSymbol(symbol));
+			URL url = new URL("https://stooq.pl/t/?i=558");
 			URLConnection con = url.openConnection();
 		
 			Reader r = new InputStreamReader(con.getInputStream(), "UTF-8");
@@ -59,11 +61,7 @@ public class LoadHTMLFile {
 		} catch (IOException e) {}
 	}
 	
-	public void filterThisSymbol() {
-		spanList.stream().filter(s->s.substring(12, 18).equals(StockSymbol.getSymbol(symbol))).forEach(System.out::println);
-	}
-	
-	public void showActualSpan() {
-		spanList.forEach(System.out::println);
+	public static List<String> getListItems(){
+		return spanList;
 	}
 }

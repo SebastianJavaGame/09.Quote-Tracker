@@ -15,7 +15,7 @@ public class Currency {
 	}
 	
 	private void calculatePercentageChange(float actualPrice) {
-		float difference = this.price - actualPrice;
+		float difference = actualPrice - this.price;
 		this.change = difference / this.price;
 	}
 	
@@ -25,7 +25,11 @@ public class Currency {
 	public float getPrice() {
 		return price;
 	}
-	public float getChange() {
-		return change;
+	public String getChange() {
+		return String.format("%.5f%n", change);
+	}
+	
+	public String toString() {
+		return getSymbol() + " " + getPrice() + " " + getChange();
 	}
 }
