@@ -2,6 +2,7 @@ package com.scislak.logic;
 
 public class Currency {
 	private String symbol;
+	private String data;
 	private float price;
 	private float change;
 	
@@ -29,6 +30,14 @@ public class Currency {
 		return String.format("%.5f%n", change);
 	}
 	
+	public String getData() {
+		return data;
+	}
+
+	public void setData(String data) {
+		this.data = data;
+	}
+
 	public String toString() {
 		return getSymbol() + " " + getPrice() + " " + getChange();
 	}
